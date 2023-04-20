@@ -64,3 +64,100 @@ exports.balls_create_post = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }
    };
+
+   // Handle cars update form on PUT.
+exports.balls_update_put = async function (req, res) {
+    console.log(`update on id ${req.params.id} with body 
+${JSON.stringify(req.body)}`)
+    try {
+        let toUpdate = await balls.findById(req.params.id)
+        // Do updates of properties
+        if (req.body.ball_name)
+            toUpdate.ball_name = req.body.ball_name;
+        if (req.body.ball_shape) toUpdate.ball_name = req.body.ball_name;
+        if (req.body.ball_size) toUpdate.ball_size = req.body.ball_size;
+        let result = await toUpdate.save();
+        console.log("Sucess " + result)
+        res.send(result)
+    } catch (err) {
+        res.status(500)
+        res.send(`{"error": ${err}: Update for id ${req.params.id} 
+failed`);
+    }
+};
+
+//screen shot 4 and 5 code
+
+// Handle balls delete on DELETE.
+exports.balls_delete = async function(req, res) {
+    console.log("delete " + req.params.id)
+    try {
+    result = await balls.findByIdAndDelete( req.params.id)
+    console.log("Removed " + result)
+    res.send(result)
+    } catch (err) {
+    res.status(500)
+    res.send(`{"error": Error deleting ${err}}`);
+    }
+   };
+
+
+   //code for ss6
+// Handle a show one view with id specified by query
+   exports.balls_view_one_Page = async function(req, res) {
+    console.log("single view for id " + req.query.id)
+    try{
+    result = await balls.findById( req.query.id)
+    res.render('ballsdetail',
+   { title: 'Balls Detail', toShow: result });
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
+    }
+   };
+
+   //ss7 code
+   // Handle building the view for creating a Balls.
+// No body, no in path parameter, no query.
+// Does not need to be async
+exports.balls_create_Page = function(req, res) {
+    console.log("create view")
+    try{
+    res.render('ballscreate', { title: 'Balls Create'});
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
+    }
+   };
+
+   // code for ss8
+   // Handle building the view for updating a Balls.
+// query provides the id
+exports.balls_update_Page = async function(req, res) {
+    console.log("update view for item "+req.query.id)
+    try{
+    let result = await balls.findById(req.query.id)
+    res.render('ballsupdate', { title: 'Balls Update', toShow: result });
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
+    }
+   };
+
+   // Handle a delete one view with id from query
+exports.balls_delete_Page = async function(req, res) {
+    console.log("Delete view for id " + req.query.id)
+    try{
+    result = await balls.findById(req.query.id)
+    res.render('ballsdelete', { title: 'Ball Delete', toShow:
+   result });
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
+    }
+   };
+   

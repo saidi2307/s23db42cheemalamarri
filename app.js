@@ -8,7 +8,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var ballRouter = require('./routes/ball');
+var ballRouter = require('./routes/balls');
 var boardRouter = require('./routes/board');
 var selectRouter=require('./routes/selector');
 var balls = require("./models/balls");
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/ball', ballRouter);
+app.use('/balls', ballRouter);
 app.use('/board',boardRouter);
 app.use('/selector', selectRouter);
 app.use('/resource', resourceRouter);

@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title
+  - let ballsid = toShow._id
+  - let ball_name = toShow.ball_name
+  - let ball_shape = toShow.ball_shape
+  - let ball_radius = toShow.ball_radius
+  
+  div
+    div.row
+      div(class='ballsAttr mr-3') balls ID is:
+      div #{ballsid}
+    div.row
+      div(class='ballsAttr mr-3') ball name is:
+      div #{ball_name}
+    div.row
+      div(class='ballsAttr mr-3') ball shape is:
+      div #{ball_shape}
+    div.row
+      div(class='ballsAttr mr-3') ball radius is:
+      div #{ball_radius}
