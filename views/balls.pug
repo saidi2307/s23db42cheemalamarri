@@ -2,13 +2,21 @@ extends layout
 
 block content
   h1= title
-  - var ball=[{ball_name:"cricketball",ball_shape:"sphere",ball_radius:10},{ball_name:"tennisball",ball_shape:"sphere",ball_radius:5},{ball_name:"rugbyball",ball_shape:"oval",ball_radius:35}]
+  -let ball = results;
   div(class="container-fluid")
-  div(class="row")
-   each b,index  in ball
-    div(class="col-sm-2" onclick =`buy(${index})`) #{b.ball_name}, #{b.ball_shape}, #{b.ball_radius}
-    script.
-        function buy(a)
-        {
-            alert(`You purchased Item ${a+1}`)
-        } 
+    each b, index  in ball
+      - let destination = `dispatch(\"/balls/update?id=${b._id}\")`
+        div(class="col-sm-2", onclick=`buy(${index})`) #{b.ball_name}, #{b.ball_shape}, #{b.ball_radius}
+        button.btn(class="btn-primary ml-1", onclick=destination) Update
+
+  script.
+    function buy(a) {
+      alert(`You purchased Item ${a+1}`)
+    } 
+
+  script.
+    function dispatch(path) {
+      window.location.href = path
+    }
+
+//-   - var ball=[{ball_name:"cricketball",ball_shape:"sphere",ball_radius:10},{ball_name:"tennisball",ball_shape:"sphere",ball_radius:5},{ball_name:"rugbyball",ball_shape:"oval",ball_radius:35}]
