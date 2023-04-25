@@ -41,6 +41,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -49,13 +56,7 @@ app.use('/balls', ballRouter);
 app.use('/board',boardRouter);
 app.use('/selector', selectRouter);
 app.use('/resource', resourceRouter);
-app.use(require('express-session')({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false
-  }));
-  app.use(passport.initialize());
-  app.use(passport.session());
+
 
 require('dotenv').config();
 const connectionString =
@@ -65,7 +66,13 @@ mongoose.connect(connectionString,
 {useNewUrlParser: true,
 useUnifiedTopology: true});
 
-
+// passport config
+// Use the existing connection
+// The Account model
+var Account =require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -96,7 +103,7 @@ async function recreateDB(){
  await balls.deleteMany();
  let instance1 = new
 balls({ball_name:"Cricket", ball_shape:'small',
-ball_size:10.4});
+ball_radius:10});
 await instance1.save();
 //  instance1.save( function(err,doc) {
 //  if(err) return console.error(err);
@@ -104,7 +111,7 @@ await instance1.save();
 //  });
 let instance2 = new
 balls({ball_name:"rugby", ball_shape:'medium',
-ball_size:20.4});
+ball_radius:20});
 await instance2.save();
 //  instance1.save( function(err,doc) {
 //  if(err) return console.error(err);
@@ -113,7 +120,7 @@ await instance2.save();
 
 let instance3 = new
 balls({ball_name:"volleyball", ball_shape:'large',
-ball_size:30.4});
+ball_radius:30});
 await instance3.save();
 //  instance1.save( function(err,doc) {
 //  if(err) return console.error(err);
@@ -123,12 +130,6 @@ await instance3.save();
 }
 let reseed = true;
 if (reseed) { recreateDB();}
-// passport config
-// Use the existing connection
-// The Account model
-var Account =require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
+
 
 module.exports = app;

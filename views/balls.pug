@@ -1,22 +1,48 @@
-extends layout
+//- extends layout
 
-block content
-  h1= title
-  -let ball = results;
-  div(class="container-fluid")
-    each b, index  in ball
-      - let destination = `dispatch(\"/balls/update?id=${b._id}\")`
-        div(class="col-sm-2", onclick=`buy(${index})`) #{b.ball_name}, #{b.ball_shape}, #{b.ball_radius}
-        button.btn(class="btn-primary ml-1", onclick=destination) Update
+//- block content
+//-   h1= title
+//-   -let ball = results;
+//-   div(class="container-fluid")
+//-     each b, index  in ball
+//-       - let destination = `dispatch(\"/balls/update?id=${b._id}\")`
+//-         div(class="col-sm-2", onclick=`buy(${index})`) #{b.ball_name}, #{b.ball_shape}, #{b.ball_radius}
+//-         button.btn(class="btn-primary ml-1", onclick=destination) Update
 
-  script.
-    function buy(a) {
-      alert(`You purchased Item ${a+1}`)
-    } 
+//-   script.
+//-     function buy(a) {
+//-       alert(`You purchased Item ${a+1}`)
+//-     } 
 
-  script.
-    function dispatch(path) {
-      window.location.href = path
-    }
+//-   script.
+//-     function dispatch(path) {
+//-       window.location.href = path
+//-     }
 
 //-   - var ball=[{ball_name:"cricketball",ball_shape:"sphere",ball_radius:10},{ball_name:"tennisball",ball_shape:"sphere",ball_radius:5},{ball_name:"rugbyball",ball_shape:"oval",ball_radius:35}]
+extends layout
+block content
+  h1= title
+  - let result = results;
+  a(class="btn btn-success" href="/balls/create") Create
+  div(class="container-fluid mt-3")
+  div(class="row m-1")
+    each result,index in results
+      - let destination = `dispatch(\"/balls/update?id=${result._id}\")`
+      div(class="col-sm-2" onclick=`buy(${index})`)  #{result.ball_name} -  #{result.ball_shape} - #{result.ball_radius}
+        button.btn( class="btn-primary ml-1", onclick= destination) Update
+        a(class="btn btn-danger" href=`/balls/delete?id=${result._id}`) Delete
+        a(class="btn btn-dark" href=`/balls/detail?id=${result._id}`) Details
+  br
+  div(class="container-fluid")
+    div(class="row")
+    - for(var i=0;i<results.length;i++) {
+        div(class="col-sm-2" width="215px" onClick=`buy(${i+1})`) #{results[i].ball_name}
+    -}
+  script. 
+    function buy(indexNum) {
+      alert(`You purchased item ${indexNum}`);
+    }
+    function dispatch(path){ 
+      window.location.href=path 
+    }
